@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Remotion and build output
+out/
+dist/
+build/
+.remotion/
+
+# Local configuration
+.env
+.env.*
+!.env.example
+
+# Logs and test output
+*.log
+coverage/
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/
