@@ -28,6 +28,15 @@ export const RemotionRoot: React.FC = () => {
       />
 
       <Composition
+        id="ZurichJsGoogleAds2026Portrait4x5"
+        component={GoogleAdsCampaign}
+        durationInFrames={300}
+        fps={30}
+        width={1080}
+        height={1350}
+      />
+
+      <Composition
         // You can take the "id" to render a video:
         // npx remotion render HelloWorld
         id="HelloWorld"

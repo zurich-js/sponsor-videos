@@ -11,6 +11,7 @@ import {
 
 const BLACK = "#050505";
 const BLUE = "#2389d7";
+type Layout = "wide" | "square" | "portrait";
 
 const clamp = {
   extrapolateLeft: "clamp" as const,
@@ -45,33 +46,34 @@ const ZurichJsMark: React.FC<{size: number}> = ({size}) => (
   </div>
 );
 
-const ConferenceLabel: React.FC<{frame: number; isSquare: boolean}> = ({
+const ConferenceLabel: React.FC<{frame: number; layout: Layout}> = ({
   frame,
-  isSquare,
+  layout,
 }) => {
   const progress = smooth(frame, 28, 54);
+  const isCompact = layout !== "wide";
 
   return (
     <div
       style={{
         position: "absolute",
-        top: isSquare ? 76 : 72,
+        top: layout === "portrait" ? 92 : layout === "square" ? 76 : 72,
         left: 0,
         right: 0,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        gap: isSquare ? 12 : 15,
+        gap: isCompact ? 12 : 15,
         opacity: progress,
         transform: `translateY(${interpolate(progress, [0, 1], [28, 0])}px) scale(${interpolate(progress, [0, 1], [0.97, 1])})`,
       }}
     >
-      <ZurichJsMark size={isSquare ? 38 : 45} />
+      <ZurichJsMark size={isCompact ? 38 : 45} />
       <div
         style={{
-          fontSize: isSquare ? 46 : 58,
+          fontSize: isCompact ? 46 : 58,
           fontWeight: 760,
-          letterSpacing: isSquare ? -1.6 : -2.1,
+          letterSpacing: isCompact ? -1.6 : -2.1,
         }}
       >
         ZurichJS Conf 2026
@@ -80,9 +82,9 @@ const ConferenceLabel: React.FC<{frame: number; isSquare: boolean}> = ({
   );
 };
 
-const Headline: React.FC<{frame: number; isSquare: boolean}> = ({
+const Headline: React.FC<{frame: number; layout: Layout}> = ({
   frame,
-  isSquare,
+  layout,
 }) => {
   const progress = smooth(frame, 58, 91);
 
@@ -90,19 +92,19 @@ const Headline: React.FC<{frame: number; isSquare: boolean}> = ({
     <div
       style={{
         position: "absolute",
-        top: isSquare ? 210 : 232,
-        left: isSquare ? 54 : 250,
-        right: isSquare ? 54 : 250,
+        top: layout === "portrait" ? 250 : layout === "square" ? 210 : 232,
+        left: layout === "wide" ? 250 : 54,
+        right: layout === "wide" ? 250 : 54,
         overflow: "hidden",
         clipPath: `inset(0 ${100 - progress * 100}% 0 0)`,
       }}
     >
       <div
         style={{
-          fontSize: isSquare ? 72 : 86,
+          fontSize: layout === "portrait" ? 70 : layout === "square" ? 72 : 86,
           fontWeight: 780,
           lineHeight: 1.04,
-          letterSpacing: isSquare ? -2.8 : -3.4,
+          letterSpacing: layout === "wide" ? -3.4 : -2.8,
           textAlign: "center",
           transform: `translateX(${interpolate(progress, [0, 1], [-90, 0])}px)`,
         }}
@@ -115,25 +117,26 @@ const Headline: React.FC<{frame: number; isSquare: boolean}> = ({
   );
 };
 
-const Categories: React.FC<{frame: number; isSquare: boolean; fps: number}> = ({
+const Categories: React.FC<{frame: number; layout: Layout; fps: number}> = ({
   frame,
-  isSquare,
+  layout,
   fps,
 }) => {
   const items = ["Meetup", "Workshops", "Conference"];
+  const isCompact = layout !== "wide";
 
   return (
     <div
       style={{
         position: "absolute",
-        top: isSquare ? 456 : 514,
+        top: layout === "portrait" ? 500 : layout === "square" ? 456 : 514,
         left: 0,
         right: 0,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        gap: isSquare ? 16 : 30,
-        fontSize: isSquare ? 34 : 45,
+        gap: isCompact ? 16 : 30,
+        fontSize: layout === "portrait" ? 36 : layout === "square" ? 34 : 45,
         fontWeight: 700,
         letterSpacing: -1.2,
       }}
@@ -153,13 +156,13 @@ const Categories: React.FC<{frame: number; isSquare: boolean; fps: number}> = ({
             style={{
               display: "flex",
               alignItems: "center",
-              gap: isSquare ? 16 : 30,
+              gap: isCompact ? 16 : 30,
               opacity: interpolate(drop, [0, 0.2, 1], [0, 1, 1], clamp),
               transform: `translateY(${interpolate(drop, [0, 1], [-70, 0])}px)`,
             }}
           >
             {index > 0 ? (
-              <span style={{fontSize: isSquare ? 25 : 33}}>•</span>
+              <span style={{fontSize: isCompact ? 25 : 33}}>•</span>
             ) : null}
             <span>{item}</span>
           </div>
@@ -169,28 +172,29 @@ const Categories: React.FC<{frame: number; isSquare: boolean; fps: number}> = ({
   );
 };
 
-const Footer: React.FC<{frame: number; isSquare: boolean}> = ({
+const Footer: React.FC<{frame: number; layout: Layout}> = ({
   frame,
-  isSquare,
+  layout,
 }) => {
   const progress = smooth(frame, 144, 174);
   const lift = interpolate(progress, [0, 1], [26, 0]);
+  const isCompact = layout !== "wide";
 
   return (
     <div
       style={{
         position: "absolute",
         zIndex: 3,
-        bottom: isSquare ? 38 : 66,
-        left: isSquare ? 40 : 72,
-        right: isSquare ? 40 : 72,
+        bottom: layout === "portrait" ? 46 : layout === "square" ? 38 : 66,
+        left: isCompact ? 40 : 72,
+        right: isCompact ? 40 : 72,
         display: "flex",
-        flexDirection: isSquare ? "column" : "row",
+        flexDirection: isCompact ? "column" : "row",
         justifyContent: "space-between",
-        alignItems: isSquare ? "center" : undefined,
-        gap: isSquare ? 10 : 0,
+        alignItems: isCompact ? "center" : undefined,
+        gap: isCompact ? 10 : 0,
         color: "white",
-        fontSize: isSquare ? 27 : 33,
+        fontSize: layout === "portrait" ? 29 : layout === "square" ? 27 : 33,
         fontWeight: 450,
         letterSpacing: -0.5,
         opacity: progress,
@@ -206,7 +210,7 @@ const Footer: React.FC<{frame: number; isSquare: boolean}> = ({
 export const GoogleAdsCampaign: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps, width, height} = useVideoConfig();
-  const isSquare = width === height;
+  const layout: Layout = height > width ? "portrait" : width === height ? "square" : "wide";
   const skylineProgress = spring({
     frame,
     fps,
@@ -225,9 +229,9 @@ export const GoogleAdsCampaign: React.FC = () => {
         overflow: "hidden",
       }}
     >
-      <ConferenceLabel frame={frame} isSquare={isSquare} />
-      <Headline frame={frame} isSquare={isSquare} />
-      <Categories frame={frame} isSquare={isSquare} fps={fps} />
+      <ConferenceLabel frame={frame} layout={layout} />
+      <Headline frame={frame} layout={layout} />
+      <Categories frame={frame} layout={layout} fps={fps} />
 
       <Img
         src={staticFile("zurich-skyline.svg")}
@@ -235,14 +239,15 @@ export const GoogleAdsCampaign: React.FC = () => {
           position: "absolute",
           zIndex: 2,
           left: 0,
-          bottom: isSquare ? -10 : -20,
+          bottom: layout === "wide" ? -20 : -10,
           width: "100%",
           height: "auto",
-          transform: `translateY(${skylineY}px)`,
+          transformOrigin: "center bottom",
+          transform: `translateY(${skylineY}px) scale(${layout === "portrait" ? 1.4 : 1})`,
         }}
       />
 
-      <Footer frame={frame} isSquare={isSquare} />
+      <Footer frame={frame} layout={layout} />
     </AbsoluteFill>
   );
 };
